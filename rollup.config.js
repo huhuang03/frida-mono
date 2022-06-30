@@ -4,7 +4,7 @@ import eslint from '@rbnlffl/rollup-plugin-eslint'
 export default {
   input: 'src/index.ts',
   output: {
-    file: 'lib/frida-mono.js',
+    dir: 'lib',
     format: 'umd',
     name: 'FridaMono'
   },
