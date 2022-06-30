@@ -1,0 +1,21 @@
+{
+  "name": "hello-frida-mono",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "frida-compile agent/index.ts -o _agent.js -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "frida-mono": "file:../../"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/frida-gum": "^18.0.0",
+    "@types/node": "^18.0.0",
+    "frida-compile": "^10.2.5"
+  }
+}

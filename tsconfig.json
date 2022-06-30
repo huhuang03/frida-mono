@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "module": "ES6",
     "moduleResolution": "node",
     "declaration": true,
-    "declarationDir": "lib",
+    "outDir": "lib",
     "target": "es6",
     "baseUrl": ".",
     "paths": {
