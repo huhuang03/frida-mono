@@ -29,3 +29,9 @@ yarn-error.log*
 
 .npmrc
 .vs
+
+.idea/
+node_modules/
+lib/
+
+_agent.js
