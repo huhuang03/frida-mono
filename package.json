@@ -3,7 +3,7 @@
   "description": "This is a wrapper around the mono api.",
   "version": "0.0.1",
   "main": "lib/index.js",
-  "types": "lib/src/index.d.ts",
+  "types": "lib/index.d.ts",
   "scripts": {
     "lint": "eslint . --fix",
     "build": "rollup --config",
