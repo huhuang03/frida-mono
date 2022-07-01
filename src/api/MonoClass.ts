@@ -1,4 +1,4 @@
-import { createNativeFunction } from 'core/native'
+import { createNativeFunction } from '../core'
 import { MonoBase } from './MonoBase'
 import { MonoDomain } from './MonoDomain'
 import { MonoImage } from './MonoImage'

@@ -1,4 +1,4 @@
-import { createNativeFunction } from 'core'
+import { createNativeFunction } from '../core'
 import { MonoBundledAssembly } from './MonoBundledAssembly'
 
 export const mono_set_rootdir = createNativeFunction('mono_set_rootdir', 'void', ['void'])

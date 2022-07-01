@@ -1,4 +1,4 @@
-import { createNativeFunction, MONO_PUBLIC_KEY_TOKEN_LENGTH } from 'core'
+import { createNativeFunction, MONO_PUBLIC_KEY_TOKEN_LENGTH } from '../core'
 import { MonoAssembly } from './MonoAssembly'
 import { MonoBase } from './MonoBase'
 

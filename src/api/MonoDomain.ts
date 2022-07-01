@@ -1,4 +1,4 @@
-import { createNativeFunction } from 'core/native'
+import { createNativeFunction } from '../core'
 import { MonoAssembly } from './MonoAssembly'
 import { MonoBase } from './MonoBase'
 

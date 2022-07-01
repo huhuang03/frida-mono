@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-export * as api from 'api'
-export * as core from 'core'
+export * as api from './api'
+export * as core from './core'
 
 /**
  * Below code is for testing purpose
  */
 
-import { MonoImage } from 'api'
-
-const assemblyCSharp = MonoImage.loaded('Assembly-CSharp')
-const a = assemblyCSharp.getResource(0)
-console.log(JSON.stringify(a))
+// import { MonoImage } from 'api'
+//
+// const assemblyCSharp = MonoImage.loaded('Assembly-CSharp')
+// const a = assemblyCSharp.getResource(0)
+// console.log(JSON.stringify(a))
 
 /*import { MonoImage, MonoClass } from 'api'
 import { MonoMetaTableEnum } from 'core/constants'

@@ -1,4 +1,4 @@
-import { createNativeFunction } from 'core/native'
+import { createNativeFunction } from '../core'
 import { MonoBase } from './MonoBase'
 
 export const mono_field_get_data = createNativeFunction('mono_field_get_data', 'pointer', ['pointer'])

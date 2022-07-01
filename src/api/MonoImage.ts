@@ -1,4 +1,4 @@
-import { createNativeFunction, MonoImageOpenStatus, MonoMetaTableEnum } from 'core'
+import { createNativeFunction, MonoImageOpenStatus, MonoMetaTableEnum } from '../core'
 import { MonoAssemblyName } from './MonoAssemblyName'
 import { MonoBase } from './MonoBase'
 import { MonoTableInfo } from './MonoTableInfo'

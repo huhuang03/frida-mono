@@ -1,13 +1,10 @@
 {
+  "include": ["src/**/*"],
   "compilerOptions": {
     "module": "ES6",
     "moduleResolution": "node",
     "declaration": true,
     "outDir": "lib",
-    "target": "es6",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["*", "src/*"]
-    }
+    "target": "es6"
   }
 }
