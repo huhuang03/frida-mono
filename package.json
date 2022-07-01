@@ -2,7 +2,7 @@
   "name": "frida-mono",
   "description": "This is a wrapper around the mono api.",
   "version": "0.0.1",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "lint": "eslint . --fix",
     "build": "rollup --config",
