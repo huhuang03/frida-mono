@@ -8,7 +8,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "frida-mono": "file:../../"
   },
   "keywords": [],
   "author": "",

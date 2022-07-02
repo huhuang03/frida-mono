@@ -13,7 +13,8 @@ let monoModule: Module | null = null
  * - Find by strings in memory
  */
 function findMonoModule(): Module {
-  throw new Error('should not call in init!!')
+  // why?
+  // throw new Error('should not call in init!!')
   for (const runtime of KNOWN_RUNTIMES) {
     const module = Process.findModuleByName(runtime)
     if (module) return module
@@ -46,17 +47,16 @@ function findMonoModule(): Module {
   throw new Error('Failed finding the mono module!')
 }
 
-function getModule(): Module {
+export function getModule(): Module {
   if (monoModule == null) {
     throw new Error('You need init mono module first(by call initModule method)')
   }
   return monoModule
 }
 
-function initModule() {
+export function initModule() {
   monoModule = findMonoModule()
 }
 
 // how do you think of this?
-
 export const module = findMonoModule()

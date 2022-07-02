@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
     "target": "es2020",
     "lib": ["es2020"],
+    "skipLibCheck": true,
     "allowJs": true,
     "noEmit": true,
     "strict": true,
-    "strictNullChecks": false,
     "esModuleInterop": true
   }
 }
