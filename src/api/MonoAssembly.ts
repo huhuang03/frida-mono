@@ -4,7 +4,6 @@ import { MonoImage } from './MonoImage'
 import { MonoAssemblyName } from './MonoAssemblyName'
 import { MonoDomain } from './MonoDomain'
 import { MonoReflectionAssembly } from './MonoReflectionAssembly'
-import { Mono } from './Mono'
 
 export const mono_assembly_close = createNativeFunction('mono_assembly_close', 'void', ['pointer'])
 export const mono_assembly_get_object = createNativeFunction('mono_assembly_get_object', 'pointer', ['pointer', 'pointer'])
