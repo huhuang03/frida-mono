@@ -5,6 +5,10 @@ const KNOWN_STRINGS = ["'%s' in MONO_PATH doesn't exist or has wrong permissions
 
 let monoModule: Module | null = null
 
+// how do you think of this?
+// can this change reference?
+export let module = monoModule
+
 /**
  * To work with mono we need the mono module thats loaded in the current process.
  * This function tries to find it using 3 methods.
@@ -13,8 +17,6 @@ let monoModule: Module | null = null
  * - Find by strings in memory
  */
 function findMonoModule(): Module {
-  // why?
-  // throw new Error('should not call in init!!')
   for (const runtime of KNOWN_RUNTIMES) {
     const module = Process.findModuleByName(runtime)
     if (module) return module
@@ -56,7 +58,5 @@ export function getModule(): Module {
 
 export function initModule() {
   monoModule = findMonoModule()
+  module = monoModule
 }
-
-// how do you think of this?
-export const module = findMonoModule()
