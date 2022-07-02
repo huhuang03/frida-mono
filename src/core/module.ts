@@ -1,6 +1,9 @@
+// how to do that you are not ready?
 const KNOWN_RUNTIMES = ['mono.dll', 'libmonosgen-2.0.so']
 const KNOWN_EXPORTS = ['mono_thread_attach']
 const KNOWN_STRINGS = ["'%s' in MONO_PATH doesn't exist or has wrong permissions"]
+
+let monoModule: Module | null = null
 
 /**
  * To work with mono we need the mono module thats loaded in the current process.
@@ -10,6 +13,7 @@ const KNOWN_STRINGS = ["'%s' in MONO_PATH doesn't exist or has wrong permissions
  * - Find by strings in memory
  */
 function findMonoModule(): Module {
+  throw new Error('should not call in init!!')
   for (const runtime of KNOWN_RUNTIMES) {
     const module = Process.findModuleByName(runtime)
     if (module) return module
@@ -41,5 +45,18 @@ function findMonoModule(): Module {
 
   throw new Error('Failed finding the mono module!')
 }
+
+function getModule(): Module {
+  if (monoModule == null) {
+    throw new Error('You need init mono module first(by call initModule method)')
+  }
+  return monoModule
+}
+
+function initModule() {
+  monoModule = findMonoModule()
+}
+
+// how do you think of this?
 
 export const module = findMonoModule()
