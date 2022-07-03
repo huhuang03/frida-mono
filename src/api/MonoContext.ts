@@ -1,10 +1,18 @@
 import { createNativeFunction } from '../core'
 import { MonoBase } from './MonoBase'
+import ExNativeFunction from '../util/ExNativeFunction'
 
-export const mono_context_get = createNativeFunction('mono_context_get', 'pointer', [])
-export const mono_context_set = createNativeFunction('mono_context_set', 'void', ['pointer'])
-export const mono_context_get_domain_id = createNativeFunction('mono_context_get_domain_id', 'int32', ['pointer'])
-export const mono_context_get_id = createNativeFunction('mono_context_get_id', 'int32', ['pointer'])
+let mono_context_get: ExNativeFunction | null = null
+let mono_context_set: ExNativeFunction | null = null
+let mono_context_get_domain_id: ExNativeFunction | null = null
+let mono_context_get_id: ExNativeFunction | null = null
+
+export function initMonoContext() {
+  mono_context_get = createNativeFunction('mono_context_get', 'pointer', [])
+  mono_context_set = createNativeFunction('mono_context_set', 'void', ['pointer'])
+  mono_context_get_domain_id = createNativeFunction('mono_context_get_domain_id', 'int32', ['pointer'])
+  mono_context_get_id = createNativeFunction('mono_context_get_id', 'int32', ['pointer'])
+}
 
 export class MonoContext extends MonoBase {
   /**

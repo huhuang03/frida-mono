@@ -15,13 +15,6 @@ def main():
     for f in os.listdir(root):
         full_path = os.path.join(root, f)
         found = parse_single_file(full_path)
-        if found:
-            break
-        
-    #     full_path = os.path.join(root, f)
-    #     parse_single_file(f)
-
-    # print("converted: "  items.join("\n"))
 
 re_item = "export const ([^ ]*) = (.*)"
 
@@ -51,6 +44,7 @@ def parse_single_file(f_path):
         return
 
     base_name = os.path.basename(f_path)
+    base_name = base_name[0: base_name.index(".")]
     found_one = False
     rst = ""
     out = False
@@ -66,16 +60,18 @@ def parse_single_file(f_path):
             if not item:
                 if len(items) > 0:
                     if entered:
-                        raise "Shoule can only parse item once."
+                        raise Exception("Shoule can only parse item once. infile: " + base_name)
                     entered = True
                     # how to do this?
                     rst += gen_code_by_items(items, base_name)
                     items = []
+                    if not line.strip():
+                        continue
                 rst += line
             else:
                 items.append(item)
                 found_one = True
-    with open(f_path, 'w') as f:
+    with open(f_path, 'w', newline='\n') as f:
         f.write(rst)
     return found_one
 

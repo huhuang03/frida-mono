@@ -9,54 +9,106 @@ import { MonoVTable } from './MonoVTable'
 import { MonoProperty } from './MonoProperty'
 import { MonoMethod } from './MonoMethod'
 import { MonoGenericParam } from './MonoGenericParam'
+import ExNativeFunction from '../util/ExNativeFunction'
+import { Mono } from './Mono'
 
-export const mono_class_get = createNativeFunction('mono_class_get', 'pointer', ['pointer', 'uint32'])
-export const mono_class_get_fields = createNativeFunction('mono_class_get_fields', 'pointer', ['pointer', 'pointer'])
-export const mono_class_from_name = createNativeFunction('mono_class_from_name', 'pointer', ['pointer', 'pointer', 'pointer'])
-export const mono_class_from_mono_type = createNativeFunction('mono_class_from_mono_type', 'pointer', ['pointer'])
-export const mono_class_from_name_case_checked = createNativeFunction('mono_class_from_name_case_checked', 'pointer', ['pointer', 'pointer', 'pointer', 'pointer'])
-export const mono_class_from_typeref = createNativeFunction('mono_class_from_typeref', 'pointer', ['pointer', 'uint32'])
-export const mono_class_from_typeref_checked = createNativeFunction('mono_class_from_typeref_checked', 'pointer', ['pointer', 'uint32', 'pointer'])
-export const mono_class_from_generic_parameter = createNativeFunction('mono_class_from_generic_parameter', 'pointer', ['pointer', 'pointer', 'bool'])
-export const mono_class_array_element_size = createNativeFunction('mono_class_array_element_size', 'int32', ['pointer'])
-export const mono_class_data_size = createNativeFunction('mono_class_data_size', 'int32', ['pointer'])
-export const mono_class_enum_basetype = createNativeFunction('mono_class_enum_basetype', 'pointer', ['pointer'])
-export const mono_class_get_byref_type = createNativeFunction('mono_class_get_byref_type', 'pointer', ['pointer'])
-export const mono_class_get_element_class = createNativeFunction('mono_class_get_element_class', 'pointer', ['pointer'])
-export const mono_class_get_field = createNativeFunction('mono_class_get_field', 'pointer', ['pointer', 'uint32'])
-export const mono_class_get_flags = createNativeFunction('mono_class_get_flags', 'int32', ['pointer'])
-export const mono_class_get_image = createNativeFunction('mono_class_get_image', 'pointer', ['pointer'])
-export const mono_class_get_interfaces = createNativeFunction('mono_class_get_interfaces', 'pointer', ['pointer', 'pointer'])
-export const mono_class_get_name = createNativeFunction('mono_class_get_name', 'pointer', ['pointer'])
-export const mono_class_get_namespace = createNativeFunction('mono_class_get_namespace', 'pointer', ['pointer'])
-export const mono_class_get_nesting_type = createNativeFunction('mono_class_get_nesting_type', 'pointer', ['pointer'])
-export const mono_class_get_parent = createNativeFunction('mono_class_get_parent', 'pointer', ['pointer'])
-export const mono_class_get_rank = createNativeFunction('mono_class_get_rank', 'int', ['pointer'])
-export const mono_class_get_type = createNativeFunction('mono_class_get_type', 'pointer', ['pointer'])
-export const mono_class_get_type_token = createNativeFunction('mono_class_get_type_token', 'uint32', ['pointer'])
-export const mono_class_implements_interface = createNativeFunction('mono_class_implements_interface', 'bool', ['pointer', 'pointer'])
-export const mono_class_init = createNativeFunction('mono_class_init', 'bool', ['pointer'])
-export const mono_class_instance_size = createNativeFunction('mono_class_instance_size', 'int32', ['pointer'])
-export const mono_class_is_assignable_from = createNativeFunction('mono_class_is_assignable_from', 'bool', ['pointer', 'pointer'])
-export const mono_class_is_delegate = createNativeFunction('mono_class_is_delegate', 'bool', ['pointer'])
-export const mono_class_is_enum = createNativeFunction('mono_class_is_enum', 'bool', ['pointer'])
-export const mono_class_is_subclass_of = createNativeFunction('mono_class_is_subclass_of', 'bool', ['pointer', 'pointer', 'bool'])
-export const mono_class_is_valuetype = createNativeFunction('mono_class_is_valuetype', 'bool', ['pointer'])
-export const mono_class_min_align = createNativeFunction('mono_class_min_align', 'int32', ['pointer'])
-export const mono_class_num_events = createNativeFunction('mono_class_num_events', 'int', ['pointer'])
-export const mono_class_num_fields = createNativeFunction('mono_class_num_fields', 'int', ['pointer'])
-export const mono_class_num_methods = createNativeFunction('mono_class_num_methods', 'int', ['pointer'])
-export const mono_class_num_properties = createNativeFunction('mono_class_num_properties', 'int', ['pointer'])
-export const mono_class_value_size = createNativeFunction('mono_class_value_size', 'int32', ['pointer', 'pointer'])
-export const mono_class_vtable = createNativeFunction('mono_class_vtable', 'pointer', ['pointer', 'pointer'])
-export const mono_class_get_field_from_name = createNativeFunction('mono_class_get_field_from_name', 'pointer', ['pointer', 'pointer'])
-export const mono_class_get_methods = createNativeFunction('mono_class_get_methods', 'pointer', ['pointer', 'pointer'])
-export const mono_class_get_method_from_name = createNativeFunction('mono_class_get_method_from_name', 'pointer', ['pointer', 'pointer', 'int'])
-export const mono_class_get_method_from_name_flags = createNativeFunction('mono_class_get_method_from_name_flags', 'pointer', ['pointer', 'pointer', 'int', 'int'])
-export const mono_class_get_nested_types = createNativeFunction('mono_class_get_nested_types', 'pointer', ['pointer', 'pointer'])
-export const mono_class_get_properties = createNativeFunction('mono_class_get_properties', 'pointer', ['pointer', 'pointer'])
-export const mono_class_get_property_from_name = createNativeFunction('mono_class_get_property_from_name', 'pointer', ['pointer', 'pointer'])
-export const mono_class_get_events = createNativeFunction('mono_class_get_events', 'pointer', ['pointer', 'pointer'])
+let mono_class_get: ExNativeFunction | null = null
+let mono_class_get_fields: ExNativeFunction | null = null
+let mono_class_from_name: ExNativeFunction | null = null
+let mono_class_from_mono_type: ExNativeFunction | null = null
+let mono_class_from_name_case_checked: ExNativeFunction | null = null
+let mono_class_from_typeref: ExNativeFunction | null = null
+let mono_class_from_typeref_checked: ExNativeFunction | null = null
+let mono_class_from_generic_parameter: ExNativeFunction | null = null
+let mono_class_array_element_size: ExNativeFunction | null = null
+let mono_class_data_size: ExNativeFunction | null = null
+let mono_class_enum_basetype: ExNativeFunction | null = null
+let mono_class_get_byref_type: ExNativeFunction | null = null
+let mono_class_get_element_class: ExNativeFunction | null = null
+let mono_class_get_field: ExNativeFunction | null = null
+let mono_class_get_flags: ExNativeFunction | null = null
+let mono_class_get_image: ExNativeFunction | null = null
+let mono_class_get_interfaces: ExNativeFunction | null = null
+let mono_class_get_name: ExNativeFunction | null = null
+let mono_class_get_namespace: ExNativeFunction | null = null
+let mono_class_get_nesting_type: ExNativeFunction | null = null
+let mono_class_get_parent: ExNativeFunction | null = null
+let mono_class_get_rank: ExNativeFunction | null = null
+let mono_class_get_type: ExNativeFunction | null = null
+let mono_class_get_type_token: ExNativeFunction | null = null
+let mono_class_implements_interface: ExNativeFunction | null = null
+let mono_class_init: ExNativeFunction | null = null
+let mono_class_instance_size: ExNativeFunction | null = null
+let mono_class_is_assignable_from: ExNativeFunction | null = null
+let mono_class_is_delegate: ExNativeFunction | null = null
+let mono_class_is_enum: ExNativeFunction | null = null
+let mono_class_is_subclass_of: ExNativeFunction | null = null
+let mono_class_is_valuetype: ExNativeFunction | null = null
+let mono_class_min_align: ExNativeFunction | null = null
+let mono_class_num_events: ExNativeFunction | null = null
+let mono_class_num_fields: ExNativeFunction | null = null
+let mono_class_num_methods: ExNativeFunction | null = null
+let mono_class_num_properties: ExNativeFunction | null = null
+let mono_class_value_size: ExNativeFunction | null = null
+let mono_class_vtable: ExNativeFunction | null = null
+let mono_class_get_field_from_name: ExNativeFunction | null = null
+let mono_class_get_methods: ExNativeFunction | null = null
+let mono_class_get_method_from_name: ExNativeFunction | null = null
+let mono_class_get_method_from_name_flags: ExNativeFunction | null = null
+let mono_class_get_nested_types: ExNativeFunction | null = null
+let mono_class_get_properties: ExNativeFunction | null = null
+let mono_class_get_property_from_name: ExNativeFunction | null = null
+let mono_class_get_events: ExNativeFunction | null = null
+
+export function initMonoClass() {
+  mono_class_get = createNativeFunction('mono_class_get', 'pointer', ['pointer', 'uint32'])
+  mono_class_get_fields = createNativeFunction('mono_class_get_fields', 'pointer', ['pointer', 'pointer'])
+  mono_class_from_name = createNativeFunction('mono_class_from_name', 'pointer', ['pointer', 'pointer', 'pointer'])
+  mono_class_from_mono_type = createNativeFunction('mono_class_from_mono_type', 'pointer', ['pointer'])
+  mono_class_from_name_case_checked = createNativeFunction('mono_class_from_name_case_checked', 'pointer', ['pointer', 'pointer', 'pointer', 'pointer'])
+  mono_class_from_typeref = createNativeFunction('mono_class_from_typeref', 'pointer', ['pointer', 'uint32'])
+  mono_class_from_typeref_checked = createNativeFunction('mono_class_from_typeref_checked', 'pointer', ['pointer', 'uint32', 'pointer'])
+  mono_class_from_generic_parameter = createNativeFunction('mono_class_from_generic_parameter', 'pointer', ['pointer', 'pointer', 'bool'])
+  mono_class_array_element_size = createNativeFunction('mono_class_array_element_size', 'int32', ['pointer'])
+  mono_class_data_size = createNativeFunction('mono_class_data_size', 'int32', ['pointer'])
+  mono_class_enum_basetype = createNativeFunction('mono_class_enum_basetype', 'pointer', ['pointer'])
+  mono_class_get_byref_type = createNativeFunction('mono_class_get_byref_type', 'pointer', ['pointer'])
+  mono_class_get_element_class = createNativeFunction('mono_class_get_element_class', 'pointer', ['pointer'])
+  mono_class_get_field = createNativeFunction('mono_class_get_field', 'pointer', ['pointer', 'uint32'])
+  mono_class_get_flags = createNativeFunction('mono_class_get_flags', 'int32', ['pointer'])
+  mono_class_get_image = createNativeFunction('mono_class_get_image', 'pointer', ['pointer'])
+  mono_class_get_interfaces = createNativeFunction('mono_class_get_interfaces', 'pointer', ['pointer', 'pointer'])
+  mono_class_get_name = createNativeFunction('mono_class_get_name', 'pointer', ['pointer'])
+  mono_class_get_namespace = createNativeFunction('mono_class_get_namespace', 'pointer', ['pointer'])
+  mono_class_get_nesting_type = createNativeFunction('mono_class_get_nesting_type', 'pointer', ['pointer'])
+  mono_class_get_parent = createNativeFunction('mono_class_get_parent', 'pointer', ['pointer'])
+  mono_class_get_rank = createNativeFunction('mono_class_get_rank', 'int', ['pointer'])
+  mono_class_get_type = createNativeFunction('mono_class_get_type', 'pointer', ['pointer'])
+  mono_class_get_type_token = createNativeFunction('mono_class_get_type_token', 'uint32', ['pointer'])
+  mono_class_implements_interface = createNativeFunction('mono_class_implements_interface', 'bool', ['pointer', 'pointer'])
+  mono_class_init = createNativeFunction('mono_class_init', 'bool', ['pointer'])
+  mono_class_instance_size = createNativeFunction('mono_class_instance_size', 'int32', ['pointer'])
+  mono_class_is_assignable_from = createNativeFunction('mono_class_is_assignable_from', 'bool', ['pointer', 'pointer'])
+  mono_class_is_delegate = createNativeFunction('mono_class_is_delegate', 'bool', ['pointer'])
+  mono_class_is_enum = createNativeFunction('mono_class_is_enum', 'bool', ['pointer'])
+  mono_class_is_subclass_of = createNativeFunction('mono_class_is_subclass_of', 'bool', ['pointer', 'pointer', 'bool'])
+  mono_class_is_valuetype = createNativeFunction('mono_class_is_valuetype', 'bool', ['pointer'])
+  mono_class_min_align = createNativeFunction('mono_class_min_align', 'int32', ['pointer'])
+  mono_class_num_events = createNativeFunction('mono_class_num_events', 'int', ['pointer'])
+  mono_class_num_fields = createNativeFunction('mono_class_num_fields', 'int', ['pointer'])
+  mono_class_num_methods = createNativeFunction('mono_class_num_methods', 'int', ['pointer'])
+  mono_class_num_properties = createNativeFunction('mono_class_num_properties', 'int', ['pointer'])
+  mono_class_value_size = createNativeFunction('mono_class_value_size', 'int32', ['pointer', 'pointer'])
+  mono_class_vtable = createNativeFunction('mono_class_vtable', 'pointer', ['pointer', 'pointer'])
+  mono_class_get_field_from_name = createNativeFunction('mono_class_get_field_from_name', 'pointer', ['pointer', 'pointer'])
+  mono_class_get_methods = createNativeFunction('mono_class_get_methods', 'pointer', ['pointer', 'pointer'])
+  mono_class_get_method_from_name = createNativeFunction('mono_class_get_method_from_name', 'pointer', ['pointer', 'pointer', 'int'])
+  mono_class_get_method_from_name_flags = createNativeFunction('mono_class_get_method_from_name_flags', 'pointer', ['pointer', 'pointer', 'int', 'int'])
+  mono_class_get_nested_types = createNativeFunction('mono_class_get_nested_types', 'pointer', ['pointer', 'pointer'])
+  mono_class_get_properties = createNativeFunction('mono_class_get_properties', 'pointer', ['pointer', 'pointer'])
+  mono_class_get_property_from_name = createNativeFunction('mono_class_get_property_from_name', 'pointer', ['pointer', 'pointer'])
+  mono_class_get_events = createNativeFunction('mono_class_get_events', 'pointer', ['pointer', 'pointer'])
+}
 
 /**
  * Mono doc: http://docs.go-mono.com/?link=xhtml%3adeploy%2fmono-api-class.html
@@ -446,6 +498,10 @@ export class MonoClass extends MonoBase {
   getVTable(domain: MonoDomain): MonoVTable {
     const address = mono_class_vtable(domain.$address, this.$address)
     return MonoVTable.fromAddress(address)
+  }
+
+  public toString(): string {
+    return `MonoClass(name=${this.name})`
   }
 
   /**

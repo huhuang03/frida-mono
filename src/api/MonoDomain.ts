@@ -1,23 +1,43 @@
 import { createNativeFunction } from '../core'
 import { MonoAssembly } from './MonoAssembly'
 import { MonoBase } from './MonoBase'
+import ExNativeFunction from '../util/ExNativeFunction'
 
-export const mono_domain_assembly_open = createNativeFunction('mono_domain_assembly_open', 'pointer', ['pointer', 'pointer'])
-export const mono_domain_create = createNativeFunction('mono_domain_create', 'pointer', [])
-export const mono_domain_create_appdomain = createNativeFunction('mono_domain_create_appdomain', 'pointer', ['pointer', 'pointer'])
-export const mono_domain_finalize = createNativeFunction('mono_domain_finalize', 'bool', ['pointer', 'uint32'])
-export const mono_domain_foreach = createNativeFunction('mono_domain_foreach', 'void', ['pointer', 'pointer'])
-export const mono_domain_free = createNativeFunction('mono_domain_free', 'void', ['pointer', 'bool'])
-export const mono_domain_get_by_id = createNativeFunction('mono_domain_get_by_id', 'pointer', ['int32'])
-export const mono_domain_get_friendly_name = createNativeFunction('mono_domain_get_friendly_name', 'pointer', ['pointer'])
-export const mono_domain_get_id = createNativeFunction('mono_domain_get_id', 'int32', ['pointer'])
-export const mono_domain_has_type_resolve = createNativeFunction('mono_domain_has_type_resolve', 'bool', ['pointer'])
-export const mono_domain_is_unloading = createNativeFunction('mono_domain_is_unloading', 'bool', ['pointer'])
-export const mono_domain_set_config = createNativeFunction('mono_domain_set_config', 'void', ['pointer', 'pointer', 'pointer'])
-export const mono_domain_set_internal = createNativeFunction('mono_domain_set_internal', 'void', ['pointer'])
-export const mono_domain_set = createNativeFunction('mono_domain_set', 'bool', ['pointer', 'bool'])
-export const mono_domain_unload = createNativeFunction('mono_domain_unload', 'void', ['pointer'])
-export const mono_context_init = createNativeFunction('mono_context_init', 'void', ['pointer'])
+let mono_domain_assembly_open: ExNativeFunction | null = null
+let mono_domain_create: ExNativeFunction | null = null
+let mono_domain_create_appdomain: ExNativeFunction | null = null
+let mono_domain_finalize: ExNativeFunction | null = null
+let mono_domain_foreach: ExNativeFunction | null = null
+let mono_domain_free: ExNativeFunction | null = null
+let mono_domain_get_by_id: ExNativeFunction | null = null
+let mono_domain_get_friendly_name: ExNativeFunction | null = null
+let mono_domain_get_id: ExNativeFunction | null = null
+let mono_domain_has_type_resolve: ExNativeFunction | null = null
+let mono_domain_is_unloading: ExNativeFunction | null = null
+let mono_domain_set_config: ExNativeFunction | null = null
+let mono_domain_set_internal: ExNativeFunction | null = null
+let mono_domain_set: ExNativeFunction | null = null
+let mono_domain_unload: ExNativeFunction | null = null
+let mono_context_init: ExNativeFunction | null = null
+
+export function initMonoDomain() {
+  mono_domain_assembly_open = createNativeFunction('mono_domain_assembly_open', 'pointer', ['pointer', 'pointer'])
+  mono_domain_create = createNativeFunction('mono_domain_create', 'pointer', [])
+  mono_domain_create_appdomain = createNativeFunction('mono_domain_create_appdomain', 'pointer', ['pointer', 'pointer'])
+  mono_domain_finalize = createNativeFunction('mono_domain_finalize', 'bool', ['pointer', 'uint32'])
+  mono_domain_foreach = createNativeFunction('mono_domain_foreach', 'void', ['pointer', 'pointer'])
+  mono_domain_free = createNativeFunction('mono_domain_free', 'void', ['pointer', 'bool'])
+  mono_domain_get_by_id = createNativeFunction('mono_domain_get_by_id', 'pointer', ['int32'])
+  mono_domain_get_friendly_name = createNativeFunction('mono_domain_get_friendly_name', 'pointer', ['pointer'])
+  mono_domain_get_id = createNativeFunction('mono_domain_get_id', 'int32', ['pointer'])
+  mono_domain_has_type_resolve = createNativeFunction('mono_domain_has_type_resolve', 'bool', ['pointer'])
+  mono_domain_is_unloading = createNativeFunction('mono_domain_is_unloading', 'bool', ['pointer'])
+  mono_domain_set_config = createNativeFunction('mono_domain_set_config', 'void', ['pointer', 'pointer', 'pointer'])
+  mono_domain_set_internal = createNativeFunction('mono_domain_set_internal', 'void', ['pointer'])
+  mono_domain_set = createNativeFunction('mono_domain_set', 'bool', ['pointer', 'bool'])
+  mono_domain_unload = createNativeFunction('mono_domain_unload', 'void', ['pointer'])
+  mono_context_init = createNativeFunction('mono_context_init', 'void', ['pointer'])
+}
 
 export class MonoDomain extends MonoBase {
   /**
@@ -206,34 +226,3 @@ export class MonoDomain extends MonoBase {
     throw new Error('Not implemented')
   }
 }
-
-//import { createNativeFunction } from 'core/native'
-//import { MonoBase } from './MonoBase'
-//
-//export const mono_field_get_data = createNativeFunction('mono_field_get_data', 'pointer', ['pointer'])
-//export const mono_field_get_offset = createNativeFunction('mono_field_get_offset', 'uint32', ['pointer'])
-//export const mono_field_full_name = createNativeFunction('mono_field_full_name', 'pointer', ['pointer'])
-//
-//export class MonoClassField extends MonoBase {
-//  /**
-//   * @returns {string} A pointer to the metadata constant value or to the field data if it has an RVA flag.
-//   */
-//   get data(): string {
-//    const address = mono_field_get_data(this.$address)
-//    return address.readUtf8String()
-//  }
-//  /**
-//   * @returns {string} The full name for the field, made up of the namespace, type name and the field name.
-//   */
-//  get fullName(): string {
-//    const address = mono_field_full_name(this.$address)
-//    return address.readUtf8String()
-//  }
-//
-//  /**
-//   * @returns {number} The field offset.
-//   */
-//  get offset(): number {
-//    return mono_field_get_offset(this.$address)
-//  }
-//}

@@ -1,9 +1,15 @@
 import { MonoBase } from './MonoBase'
 import { MonoClassField } from './MonoClassField'
-import { createNativeFunction } from '../core/native'
+import { createNativeFunction } from '../core'
+import ExNativeFunction from '../util/ExNativeFunction'
 
-export const mono_method_can_access_field = createNativeFunction('mono_method_can_access_field', 'bool', ['pointer', 'pointer'])
-export const mono_method_can_access_method = createNativeFunction('mono_method_can_access_method', 'bool', ['pointer', 'pointer'])
+let mono_method_can_access_field: ExNativeFunction | null = null
+let mono_method_can_access_method: ExNativeFunction | null = null
+
+export function initMonoMethod() {
+  mono_method_can_access_field = createNativeFunction('mono_method_can_access_field', 'bool', ['pointer', 'pointer'])
+  mono_method_can_access_method = createNativeFunction('mono_method_can_access_method', 'bool', ['pointer', 'pointer'])
+}
 
 export class MonoMethod extends MonoBase {
   /**

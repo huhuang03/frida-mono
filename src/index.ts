@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { initModule } from './core'
+import { initApi } from './api'
 
 export * as api from './api'
 export * as core from './core'
 
 export function init() {
   initModule()
+  initApi()
 }
 
 /**

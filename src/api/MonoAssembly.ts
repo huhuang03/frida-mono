@@ -4,27 +4,51 @@ import { MonoImage } from './MonoImage'
 import { MonoAssemblyName } from './MonoAssemblyName'
 import { MonoDomain } from './MonoDomain'
 import { MonoReflectionAssembly } from './MonoReflectionAssembly'
+import ExNativeFunction from '../util/ExNativeFunction'
 
-export const mono_assembly_close = createNativeFunction('mono_assembly_close', 'void', ['pointer'])
-export const mono_assembly_get_object = createNativeFunction('mono_assembly_get_object', 'pointer', ['pointer', 'pointer'])
-export const mono_assembly_load = createNativeFunction('mono_assembly_load', 'pointer', ['pointer', 'pointer', 'pointer'])
-export const mono_assembly_load_full = createNativeFunction('mono_assembly_load_full', 'pointer', ['pointer', 'pointer', 'pointer', 'bool'])
-export const mono_assembly_loaded = createNativeFunction('mono_assembly_loaded', 'pointer', ['pointer'])
-export const mono_assembly_loaded_full = createNativeFunction('mono_assembly_loaded_full', 'pointer', ['pointer', 'bool'])
-export const mono_assembly_load_from = createNativeFunction('mono_assembly_load_from', 'pointer', ['pointer', 'pointer', 'pointer'])
-export const mono_assembly_load_from_full = createNativeFunction('mono_assembly_load_from_full', 'pointer', ['pointer', 'pointer', 'pointer', 'bool'])
-export const mono_assembly_load_with_partial_name = createNativeFunction('mono_assembly_load_with_partial_name', 'pointer', ['pointer', 'pointer'])
-export const mono_assembly_open = createNativeFunction('mono_assembly_open', 'pointer', ['pointer', 'pointer'])
-export const mono_assembly_open_full = createNativeFunction('mono_assembly_open_full', 'pointer', ['pointer', 'pointer', 'bool'])
-export const mono_set_assemblies_path = createNativeFunction('mono_set_assemblies_path', 'void', ['pointer'])
-export const mono_assembly_foreach = createNativeFunction('mono_assembly_foreach', 'void', ['pointer', 'pointer'])
-export const mono_assembly_get_image = createNativeFunction('mono_assembly_get_image', 'pointer', ['pointer'])
-export const mono_assembly_get_main = createNativeFunction('mono_assembly_get_main', 'pointer', ['void'])
-export const mono_assembly_get_name = createNativeFunction('mono_assembly_get_name', 'pointer', ['pointer'])
-export const mono_assembly_getrootdir = createNativeFunction('mono_assembly_getrootdir', 'pointer', ['void'])
-export const mono_assembly_setrootdir = createNativeFunction('mono_assembly_setrootdir', 'void', ['pointer'])
-export const mono_assembly_load_module = createNativeFunction('mono_assembly_load_module', 'pointer', ['pointer', 'uint32'])
-export const mono_assembly_invoke_load_hook = createNativeFunction('mono_assembly_invoke_load_hook', 'void', ['pointer'])
+let mono_assembly_close: ExNativeFunction | null = null
+let mono_assembly_get_object: ExNativeFunction | null = null
+let mono_assembly_load: ExNativeFunction | null = null
+let mono_assembly_load_full: ExNativeFunction | null = null
+let mono_assembly_loaded: ExNativeFunction | null = null
+let mono_assembly_loaded_full: ExNativeFunction | null = null
+let mono_assembly_load_from: ExNativeFunction | null = null
+let mono_assembly_load_from_full: ExNativeFunction | null = null
+let mono_assembly_load_with_partial_name: ExNativeFunction | null = null
+let mono_assembly_open: ExNativeFunction | null = null
+let mono_assembly_open_full: ExNativeFunction | null = null
+let mono_set_assemblies_path: ExNativeFunction | null = null
+let mono_assembly_foreach: ExNativeFunction | null = null
+let mono_assembly_get_image: ExNativeFunction | null = null
+let mono_assembly_get_main: ExNativeFunction | null = null
+let mono_assembly_get_name: ExNativeFunction | null = null
+let mono_assembly_getrootdir: ExNativeFunction | null = null
+let mono_assembly_setrootdir: ExNativeFunction | null = null
+let mono_assembly_load_module: ExNativeFunction | null = null
+let mono_assembly_invoke_load_hook: ExNativeFunction | null = null
+
+export function initMonoAssembly() {
+  mono_assembly_close = createNativeFunction('mono_assembly_close', 'void', ['pointer'])
+  mono_assembly_get_object = createNativeFunction('mono_assembly_get_object', 'pointer', ['pointer', 'pointer'])
+  mono_assembly_load = createNativeFunction('mono_assembly_load', 'pointer', ['pointer', 'pointer', 'pointer'])
+  mono_assembly_load_full = createNativeFunction('mono_assembly_load_full', 'pointer', ['pointer', 'pointer', 'pointer', 'bool'])
+  mono_assembly_loaded = createNativeFunction('mono_assembly_loaded', 'pointer', ['pointer'])
+  mono_assembly_loaded_full = createNativeFunction('mono_assembly_loaded_full', 'pointer', ['pointer', 'bool'])
+  mono_assembly_load_from = createNativeFunction('mono_assembly_load_from', 'pointer', ['pointer', 'pointer', 'pointer'])
+  mono_assembly_load_from_full = createNativeFunction('mono_assembly_load_from_full', 'pointer', ['pointer', 'pointer', 'pointer', 'bool'])
+  mono_assembly_load_with_partial_name = createNativeFunction('mono_assembly_load_with_partial_name', 'pointer', ['pointer', 'pointer'])
+  mono_assembly_open = createNativeFunction('mono_assembly_open', 'pointer', ['pointer', 'pointer'])
+  mono_assembly_open_full = createNativeFunction('mono_assembly_open_full', 'pointer', ['pointer', 'pointer', 'bool'])
+  mono_set_assemblies_path = createNativeFunction('mono_set_assemblies_path', 'void', ['pointer'])
+  mono_assembly_foreach = createNativeFunction('mono_assembly_foreach', 'void', ['pointer', 'pointer'])
+  mono_assembly_get_image = createNativeFunction('mono_assembly_get_image', 'pointer', ['pointer'])
+  mono_assembly_get_main = createNativeFunction('mono_assembly_get_main', 'pointer', ['void'])
+  mono_assembly_get_name = createNativeFunction('mono_assembly_get_name', 'pointer', ['pointer'])
+  mono_assembly_getrootdir = createNativeFunction('mono_assembly_getrootdir', 'pointer', ['void'])
+  mono_assembly_setrootdir = createNativeFunction('mono_assembly_setrootdir', 'void', ['pointer'])
+  mono_assembly_load_module = createNativeFunction('mono_assembly_load_module', 'pointer', ['pointer', 'uint32'])
+  mono_assembly_invoke_load_hook = createNativeFunction('mono_assembly_invoke_load_hook', 'void', ['pointer'])
+}
 
 export class MonoAssembly extends MonoBase {
   /**

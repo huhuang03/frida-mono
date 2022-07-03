@@ -1,9 +1,15 @@
 import { createNativeFunction, MONO_PUBLIC_KEY_TOKEN_LENGTH } from '../core'
 import { MonoAssembly } from './MonoAssembly'
 import { MonoBase } from './MonoBase'
+import ExNativeFunction from '../util/ExNativeFunction'
 
-export const mono_assembly_name_new = createNativeFunction('mono_assembly_name_new', 'pointer', ['pointer'])
-export const mono_assembly_invoke_search_hook = createNativeFunction('mono_assembly_invoke_search_hook', 'pointer', ['pointer'])
+let mono_assembly_name_new: ExNativeFunction | null = null
+let mono_assembly_invoke_search_hook: ExNativeFunction | null = null
+
+export function initMonoAssemblyName() {
+  mono_assembly_name_new = createNativeFunction('mono_assembly_name_new', 'pointer', ['pointer'])
+  mono_assembly_invoke_search_hook = createNativeFunction('mono_assembly_invoke_search_hook', 'pointer', ['pointer'])
+}
 
 export class MonoAssemblyName extends MonoBase {
   constructor(name: string) {

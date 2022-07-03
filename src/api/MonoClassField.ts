@@ -1,9 +1,16 @@
 import { createNativeFunction } from '../core'
 import { MonoBase } from './MonoBase'
+import ExNativeFunction from '../util/ExNativeFunction'
 
-export const mono_field_get_data = createNativeFunction('mono_field_get_data', 'pointer', ['pointer'])
-export const mono_field_get_offset = createNativeFunction('mono_field_get_offset', 'uint32', ['pointer'])
-export const mono_field_full_name = createNativeFunction('mono_field_full_name', 'pointer', ['pointer'])
+let mono_field_get_data: ExNativeFunction | null = null
+let mono_field_get_offset: ExNativeFunction | null = null
+let mono_field_full_name: ExNativeFunction | null = null
+
+export function initMonoClassField() {
+  mono_field_get_data = createNativeFunction('mono_field_get_data', 'pointer', ['pointer'])
+  mono_field_get_offset = createNativeFunction('mono_field_get_offset', 'uint32', ['pointer'])
+  mono_field_full_name = createNativeFunction('mono_field_full_name', 'pointer', ['pointer'])
+}
 
 export class MonoClassField extends MonoBase {
   /**

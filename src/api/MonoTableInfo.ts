@@ -1,7 +1,12 @@
 import { MonoBase } from './MonoBase'
-import { createNativeFunction } from '../core/native'
+import { createNativeFunction } from '../core'
+import ExNativeFunction from '../util/ExNativeFunction'
 
-export const mono_table_info_get_rows = createNativeFunction('mono_table_info_get_rows', 'int', ['pointer'])
+let mono_table_info_get_rows: ExNativeFunction | null = null
+
+export function initMonoTableInfo() {
+  mono_table_info_get_rows = createNativeFunction('mono_table_info_get_rows', 'int', ['pointer'])
+}
 
 export class MonoTableInfo extends MonoBase {
   get rowSize(): number {

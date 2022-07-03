@@ -2,16 +2,35 @@ import { createNativeFunction, MonoImageOpenStatus, MonoMetaTableEnum } from '..
 import { MonoAssemblyName } from './MonoAssemblyName'
 import { MonoBase } from './MonoBase'
 import { MonoTableInfo } from './MonoTableInfo'
+import ExNativeFunction from '../util/ExNativeFunction'
 
-export const mono_load_image = createNativeFunction('mono_load_image', 'pointer', ['pointer', 'pointer'])
-export const mono_image_loaded = createNativeFunction('mono_image_loaded', 'pointer', ['pointer'])
-export const mono_image_get_filename = createNativeFunction('mono_image_get_filename', 'pointer', ['pointer'])
-export const mono_image_get_name = createNativeFunction('mono_image_get_name', 'pointer', ['pointer'])
-export const mono_image_get_resource = createNativeFunction('mono_image_get_resource', 'pointer', ['pointer', 'uint32', 'pointer'])
-export const mono_image_get_table_info = createNativeFunction('mono_image_get_table_info', 'pointer', ['pointer', 'int'])
-export const mono_assembly_get_assemblyref = createNativeFunction('mono_assembly_get_assemblyref', 'void', ['pointer', 'int', 'pointer'])
-export const mono_assembly_fill_assembly_name = createNativeFunction('mono_assembly_fill_assembly_name', 'bool', ['pointer', 'pointer'])
-export const mono_assembly_load_reference = createNativeFunction('mono_assembly_load_reference', 'void', ['pointer', 'int'])
+// not exist in unity-mono
+let mono_load_image: ExNativeFunction | null = null
+let mono_image_open: ExNativeFunction | null = null
+let mono_image_open_raw: ExNativeFunction | null = null
+let mono_image_loaded: ExNativeFunction | null = null
+let mono_image_get_filename: ExNativeFunction | null = null
+let mono_image_get_name: ExNativeFunction | null = null
+let mono_image_get_resource: ExNativeFunction | null = null
+let mono_image_get_table_info: ExNativeFunction | null = null
+let mono_assembly_get_assemblyref: ExNativeFunction | null = null
+let mono_assembly_fill_assembly_name: ExNativeFunction | null = null
+let mono_assembly_load_reference: ExNativeFunction | null = null
+
+export function initMonoImage() {
+  mono_load_image = createNativeFunction('mono_load_image', 'pointer', ['pointer', 'pointer'])
+  // mono_image_open_raw
+  mono_image_open = createNativeFunction('mono_image_open', 'pointer', ['pointer', 'pointer'])
+  mono_image_open_raw = createNativeFunction('mono_image_open_raw', 'pointer', ['pointer', 'pointer'])
+  mono_image_loaded = createNativeFunction('mono_image_loaded', 'pointer', ['pointer'])
+  mono_image_get_filename = createNativeFunction('mono_image_get_filename', 'pointer', ['pointer'])
+  mono_image_get_name = createNativeFunction('mono_image_get_name', 'pointer', ['pointer'])
+  mono_image_get_resource = createNativeFunction('mono_image_get_resource', 'pointer', ['pointer', 'uint32', 'pointer'])
+  mono_image_get_table_info = createNativeFunction('mono_image_get_table_info', 'pointer', ['pointer', 'int'])
+  mono_assembly_get_assemblyref = createNativeFunction('mono_assembly_get_assemblyref', 'void', ['pointer', 'int', 'pointer'])
+  mono_assembly_fill_assembly_name = createNativeFunction('mono_assembly_fill_assembly_name', 'bool', ['pointer', 'pointer'])
+  mono_assembly_load_reference = createNativeFunction('mono_assembly_load_reference', 'void', ['pointer', 'int'])
+}
 
 /*
 std::list<MonoClass*> GetAssemblyClassList(MonoImage * image)
@@ -120,6 +139,25 @@ export class MonoImage extends MonoBase {
     return MonoImage.fromAddress(address)
   }
 
+  // for now use load1
+  static load1(name: string): MonoImage {
+    const status = Memory.alloc(Process.pointerSize)
+    const address = mono_image_open_raw(Memory.allocUtf8String(name), status)
+    if (address.isNull()) {
+      throw new Error('Failed loading MonoImage! Error: ' + MonoImageOpenStatus[status.readInt()])
+    }
+    return MonoImage.fromAddress(address)
+  }
+
+  static load2(name: string): MonoImage {
+    const status = Memory.alloc(Process.pointerSize)
+    const address = mono_image_open(Memory.allocUtf8String(name), status)
+    if (address.isNull()) {
+      throw new Error('Failed loading MonoImage! Error: ' + MonoImageOpenStatus[status.readInt()])
+    }
+    return MonoImage.fromAddress(address)
+  }
+
   /**
    * This routine verifies that the given image is loaded. Reflection-only loads do not count.
    * @param {string} name - Path or assembly name of the image to load.
@@ -128,5 +166,9 @@ export class MonoImage extends MonoBase {
   static loaded(name: string): MonoImage {
     const address: NativePointer = mono_image_loaded(Memory.allocUtf8String(name))
     return MonoImage.fromAddress(address)
+  }
+
+  public toString(): string {
+    return `MonoImage(name=${this.name})`
   }
 }
