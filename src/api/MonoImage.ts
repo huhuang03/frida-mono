@@ -5,7 +5,6 @@ import { MonoTableInfo } from './MonoTableInfo'
 import ExNativeFunction from '../util/ExNativeFunction'
 
 // not exist in unity-mono
-let mono_load_image: ExNativeFunction | null = null
 let mono_image_open: ExNativeFunction | null = null
 let mono_image_open_raw: ExNativeFunction | null = null
 let mono_image_loaded: ExNativeFunction | null = null
@@ -18,7 +17,6 @@ let mono_assembly_fill_assembly_name: ExNativeFunction | null = null
 let mono_assembly_load_reference: ExNativeFunction | null = null
 
 export function initMonoImage() {
-  mono_load_image = createNativeFunction('mono_load_image', 'pointer', ['pointer', 'pointer'])
   // mono_image_open_raw
   mono_image_open = createNativeFunction('mono_image_open', 'pointer', ['pointer', 'pointer'])
   mono_image_open_raw = createNativeFunction('mono_image_open_raw', 'pointer', ['pointer', 'pointer'])
@@ -121,22 +119,6 @@ export class MonoImage extends MonoBase {
    */
   loadReference(index: number): void {
     mono_assembly_load_reference(this.$address, index)
-  }
-
-  /**
-   * Static methods
-   */
-  /**
-   * @param {string} name
-   * @returns {MonoImage}
-   */
-  static load(name: string): MonoImage {
-    const status = Memory.alloc(Process.pointerSize)
-    const address = mono_load_image(Memory.allocUtf8String(name), status)
-    if (address.isNull()) {
-      throw new Error('Failed loading MonoImage! Error: ' + MonoImageOpenStatus[status.readInt()])
-    }
-    return MonoImage.fromAddress(address)
   }
 
   // for now use load1
