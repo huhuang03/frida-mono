@@ -3,6 +3,7 @@ import { MonoAssembly } from './MonoAssembly'
 import { MonoBase } from './MonoBase'
 import ExNativeFunction from '../util/ExNativeFunction'
 
+let mono_domain_get_root_domain: ExNativeFunction | null = null
 let mono_domain_assembly_open: ExNativeFunction | null = null
 let mono_domain_create: ExNativeFunction | null = null
 let mono_domain_create_appdomain: ExNativeFunction | null = null
@@ -21,6 +22,7 @@ let mono_domain_unload: ExNativeFunction | null = null
 let mono_context_init: ExNativeFunction | null = null
 
 export function initMonoDomain() {
+  mono_domain_get_root_domain = createNativeFunction('mono_get_root_domain', 'pointer', [])
   mono_domain_assembly_open = createNativeFunction('mono_domain_assembly_open', 'pointer', ['pointer', 'pointer'])
   mono_domain_create = createNativeFunction('mono_domain_create', 'pointer', [])
   mono_domain_create_appdomain = createNativeFunction('mono_domain_create_appdomain', 'pointer', ['pointer', 'pointer'])
@@ -224,5 +226,10 @@ export class MonoDomain extends MonoBase {
   static fromAppDomain(): MonoDomain {
     // MonoDomain *mono_domain_from_appdomain (MonoAppDomain *appdomain);
     throw new Error('Not implemented')
+  }
+
+  static rootDomain(): MonoDomain {
+    const address = mono_domain_get_root_domain()
+    return MonoDomain.fromAddress(address)
   }
 }

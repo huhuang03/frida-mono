@@ -5,13 +5,19 @@ import ExNativeFunction from '../util/ExNativeFunction'
 
 let mono_method_can_access_field: ExNativeFunction | null = null
 let mono_method_can_access_method: ExNativeFunction | null = null
+let mono_runtime_invoke: ExNativeFunction | null = null
 
 export function initMonoMethod() {
   mono_method_can_access_field = createNativeFunction('mono_method_can_access_field', 'bool', ['pointer', 'pointer'])
   mono_method_can_access_method = createNativeFunction('mono_method_can_access_method', 'bool', ['pointer', 'pointer'])
+  mono_runtime_invoke = createNativeFunction('mono_runtime_invoke', 'pointer', ['pointer', 'pointer', 'pointer', 'pointer'])
 }
 
 export class MonoMethod extends MonoBase {
+  invoke(obj: NativePointer | null, params: NativePointer | null, exc: NativePointer | null): NativePointer {
+    return mono_runtime_invoke(this.$address, obj, params, exc)
+  }
+
   /**
    * Used to determine if a method is allowed to access the specified field.
    * @param {MonoClassField} field - The field to access

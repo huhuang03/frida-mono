@@ -3,7 +3,6 @@ import ExNativeFunction from '../util/ExNativeFunction'
 
 export function createNativeFunction(name: string, retType: NativeType, argTypes: NativeType[], abiOrOptions: NativeFunctionOptions | NativeABI = 'default'): ExNativeFunction {
   const address = Module.findExportByName(module.name, name)
-  console.log('module: ', module, 'name: ', name, ' address: ', address)
 
   if (!address) {
     console.warn('Warning! Native mono export not found! Expected export: ' + name)

@@ -258,6 +258,7 @@ export class MonoAssembly extends MonoBase {
   static open(filename: string): MonoAssembly {
     const status = Memory.alloc(Process.pointerSize)
     const address = mono_assembly_open(Memory.allocUtf8String(filename), status)
+    // how to get errno?
     if (address.isNull()) {
       throw new Error('Failed opening MonoAssembly! Error: ' + MonoImageOpenStatus[status.readInt()])
     }
