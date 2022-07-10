@@ -14,7 +14,7 @@
   "devDependencies": {
     "@rbnlffl/rollup-plugin-eslint": "^1.1.4",
     "@rollup/plugin-typescript": "^6.1.0",
-    "@types/frida-gum": "^16.2.0",
+    "@types/frida-gum": "^18.1.0",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
     "eslint": "^7.13.0",

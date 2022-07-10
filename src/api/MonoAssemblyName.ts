@@ -5,16 +5,22 @@ import ExNativeFunction from '../util/ExNativeFunction'
 
 let mono_assembly_name_new: ExNativeFunction | null = null
 let mono_assembly_invoke_search_hook: ExNativeFunction | null = null
+let mono_image_get_assembly: ExNativeFunction | null = null
 
 export function initMonoAssemblyName() {
   mono_assembly_name_new = createNativeFunction('mono_assembly_name_new', 'pointer', ['pointer'])
   mono_assembly_invoke_search_hook = createNativeFunction('mono_assembly_invoke_search_hook', 'pointer', ['pointer'])
+  mono_image_get_assembly = createNativeFunction('mono_image_get_assembly', 'pointer', ['pointer'])
 }
 
 export class MonoAssemblyName extends MonoBase {
   constructor(name: string) {
     super()
     this.$address = mono_assembly_name_new(Memory.allocUtf8String(name))
+  }
+
+  get assembly(): MonoAssembly {
+    return MonoAssembly.fromAddress(mono_image_get_assembly(this.$address))
   }
 
   get name(): string {

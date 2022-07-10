@@ -35,7 +35,7 @@ export function initMonoAssembly() {
   mono_assembly_loaded = createNativeFunction('mono_assembly_loaded', 'pointer', ['pointer'])
   mono_assembly_loaded_full = createNativeFunction('mono_assembly_loaded_full', 'pointer', ['pointer', 'bool'])
   mono_assembly_load_from = createNativeFunction('mono_assembly_load_from', 'pointer', ['pointer', 'pointer', 'pointer'])
-  mono_assembly_load_from_full = createNativeFunction('mono_assembly_load_from_full', 'pointer', ['pointer', 'pointer', 'pointer', 'bool'])
+  mono_assembly_load_from_full = createNativeFunction('mono_assembly_load_from_full', 'pointer', ['pointer', 'pointer', 'pointer', 'int'])
   mono_assembly_load_with_partial_name = createNativeFunction('mono_assembly_load_with_partial_name', 'pointer', ['pointer', 'pointer'])
   mono_assembly_open = createNativeFunction('mono_assembly_open', 'pointer', ['pointer', 'pointer'])
   mono_assembly_open_full = createNativeFunction('mono_assembly_open_full', 'pointer', ['pointer', 'pointer', 'bool'])
@@ -223,7 +223,7 @@ export class MonoAssembly extends MonoBase {
    */
   static loadFromFull(image: MonoImage, name: string, refOnly: boolean): MonoAssembly {
     const status = Memory.alloc(Process.pointerSize)
-    const address = mono_assembly_load_from_full(image.$address, Memory.allocUtf8String(name), status, refOnly)
+    const address = mono_assembly_load_from_full(image.$address, Memory.allocUtf8String(name), status, refOnly ? 1 : 0)
     if (address.isNull()) {
       throw new Error('Failed loading MonoAssembly! Error: ' + MonoImageOpenStatus[status.readInt()])
     }

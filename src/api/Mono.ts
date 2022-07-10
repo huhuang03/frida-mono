@@ -1,7 +1,9 @@
 import { createNativeFunction } from '../core'
 import { MonoBundledAssembly } from './MonoBundledAssembly'
 import ExNativeFunction from '../util/ExNativeFunction'
+import { MonoDomain } from './MonoDomain'
 
+let mono_thread_attach: ExNativeFunction | null = null
 let mono_set_rootdir: ExNativeFunction | null = null
 let mono_set_dirs: ExNativeFunction | null = null
 let mono_set_assemblies_path: ExNativeFunction | null = null
@@ -11,6 +13,7 @@ let mono_register_symfile_for_assembly: ExNativeFunction | null = null
 let mono_register_machine_config: ExNativeFunction | null = null
 
 export function initMono() {
+  mono_thread_attach = createNativeFunction('mono_thread_attach', 'pointer', ['pointer'])
   mono_set_rootdir = createNativeFunction('mono_set_rootdir', 'void', ['void'])
   mono_set_dirs = createNativeFunction('mono_set_dirs', 'void', ['pointer', 'pointer'])
   mono_set_assemblies_path = createNativeFunction('mono_set_assemblies_path', 'void', ['pointer'])
@@ -21,6 +24,10 @@ export function initMono() {
 }
 
 export class Mono {
+  static thread_attach(domain: MonoDomain): NativePointer {
+    return mono_thread_attach(domain.$address)
+  }
+
   static setRootDir(): void {
     mono_set_rootdir()
   }

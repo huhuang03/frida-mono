@@ -14,6 +14,7 @@ export function initMonoMethod() {
 }
 
 export class MonoMethod extends MonoBase {
+  // what's this?
   invoke(obj: NativePointer | null, params: NativePointer | null, exc: NativePointer | null): NativePointer {
     return mono_runtime_invoke(this.$address, obj, params, exc)
   }

@@ -6,6 +6,7 @@ import ExNativeFunction from '../util/ExNativeFunction'
 
 // not exist in unity-mono
 let mono_image_open: ExNativeFunction | null = null
+let mono_image_open_from_data: ExNativeFunction | null = null
 let mono_image_open_raw: ExNativeFunction | null = null
 let mono_image_loaded: ExNativeFunction | null = null
 let mono_image_get_filename: ExNativeFunction | null = null
@@ -17,8 +18,8 @@ let mono_assembly_fill_assembly_name: ExNativeFunction | null = null
 let mono_assembly_load_reference: ExNativeFunction | null = null
 
 export function initMonoImage() {
-  // mono_image_open_raw
   mono_image_open = createNativeFunction('mono_image_open', 'pointer', ['pointer', 'pointer'])
+  mono_image_open_from_data = createNativeFunction('mono_image_open_from_data', 'pointer', ['pointer', 'uint32', 'int', 'pointer'])
   mono_image_open_raw = createNativeFunction('mono_image_open_raw', 'pointer', ['pointer', 'pointer'])
   mono_image_loaded = createNativeFunction('mono_image_loaded', 'pointer', ['pointer'])
   mono_image_get_filename = createNativeFunction('mono_image_get_filename', 'pointer', ['pointer'])
@@ -119,6 +120,16 @@ export class MonoImage extends MonoBase {
    */
   loadReference(index: number): void {
     mono_assembly_load_reference(this.$address, index)
+  }
+
+  static openFromData(data: ArrayBuffer): MonoImage {
+    const len = data.byteLength
+    const dataBytes = Memory.alloc(len)
+    dataBytes.writeByteArray(data)
+    const status = Memory.alloc(Process.pointerSize)
+    // how to check result?
+    // mono_image_open_from_data = createNativeFunction('mono_image_open_from_data', 'pointer', ['pointer', 'uint32', 'bool', 'pointer'])
+    return MonoImage.fromAddress(mono_image_open_from_data(dataBytes, len, -1, status))
   }
 
   // for now use load1
